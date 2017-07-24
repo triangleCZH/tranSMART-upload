@@ -1,0 +1,13 @@
+\c transmart
+delete from deapp.de_variant_subject_detail where dataset_id='myvcf';
+delete from deapp.de_variant_subject_summary where dataset_id='myvcf';
+delete from deapp.de_variant_subject_idx where dataset_id='myvcf';
+delete from deapp.de_variant_population_data where dataset_id='myvcf';
+delete from deapp.de_variant_population_info where dataset_id='myvcf';
+delete from deapp.de_variant_metadata where dataset_id='myvcf';
+delete from deapp.de_variant_dataset where dataset_id='myvcf';
+delete from deapp.de_subject_sample_mapping where trial_name='myvcf';
+delete from I2B2METADATA.I2B2 where c_fullname = '\Public Studies\CGDB\myvcf\Variant\vcf\';
+delete from I2B2METADATA.I2B2_SECURE where c_fullname = '\Public Studies\CGDB\myvcf\Variant\vcf\';
+delete from I2B2DEMODATA.CONCEPT_DIMENSION where concept_path = '\Public Studies\CGDB\myvcf\Variant\vcf\';
+\q
