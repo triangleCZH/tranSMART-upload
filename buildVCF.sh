@@ -68,11 +68,12 @@ echo $searchExistence
 if [ $searchExistence -eq 0 ]
 then
   echo "This is a new file, record the study name in study_id.txt"
-  echo $1 >> study_id.txt
+  #echo $1 >> study_id.txt
 else
   ./deleteVCFDB.sh $1
   echo "$1 old vcf file is deleted"
 fi
+echo $1 >> study_id.txt
 cd /home/transmart/transmart/transmart-data/samples/studies/
 
 #check study folder name existence
