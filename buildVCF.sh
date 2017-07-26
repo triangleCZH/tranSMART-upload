@@ -128,10 +128,11 @@ fi
 cd /home/transmart/transmart/transmart-data/samples/studies/$1/vcf
 vcfName="`ls`" #by default, we should only have one vcf file for this study, or else ls may not work
 echo "I know that the vcf file name is $vcfName"
-cd /home/transmart/transmart/transmart-data/samples/common/_scripts/vcf
-echo "Now dealing with the converMappingIntoSQLFiles.pl"
-sed -i "s/\$ARGV\[2\]/\"$1\"/g" convertMappingIntoSQLFiles.pl
-cd ../../$1
+#cd /home/transmart/transmart/transmart-data/samples/common/_scripts/vcf
+#echo "Now dealing with the converMappingIntoSQLFiles.pl"
+#sed -i "s/\$ARGV\[2\]/\"$1\"/g" convertMappingIntoSQLFiles.pl
+#cd ../../$1
+cd /home/transmart/transmart/transmart-data/samples/common/$1
 echo "use the $vcfName-vcf.params as source"
 . ./$vcfName-vcf.params
 
