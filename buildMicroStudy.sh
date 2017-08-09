@@ -5,6 +5,30 @@ then
   echo "please enter two arguments: NO.1 to use as the study name NO.2 to specify the sample txt file name"
   exit 1
 fi
+
+#delete the study and the mutation if they exist
+echo "#############################################"
+echo "# Delete the study $1 and mutation if exist #"
+echo "#############################################"
+./deleteGENEDB.sh $1
+
+
+#check if sample and parsed vcf data file exist
+if [ ! -f $2 ]
+then
+  echo "the file $2 does not exist, please make sure is is in transmart-batch/studies"
+  #exit 1
+elif [ ${2: -4} != ".txt" ]
+then
+  echo "the file $2 needs to be .txt, please check the file format"
+  #exit 1
+elif [ -d $2 ]
+then
+  echo "$2 needs to be a file, not a directory"
+  #exit 1
+fi
+cp $2 /home/transmart/transmart/transmart-data/samples/studies/$1_Clinical_Data.txt
+
 cd /home/transmart/transmart/transmart-data/samples/studies/
 #check folder name existence
 if [ -e $1 ]
@@ -17,20 +41,6 @@ then
   else
     rm $1
   fi
-  #exit 1
-fi
-#check if sample and parsed vcf data file exist
-if [ ! -f $2 ]
-then
-  echo "the file $2 does not exist, please make sure is is in transmart-batch/studies"
-  #exit 1
-elif [ ${2: -4} != ".txt" ]
-then 
-  echo "the file $2 needs to be .txt, please check the file format"
-  #exit 1
-elif [ -d $2 ]
-then
-  echo "$2 needs to be a file, not a directory"
   #exit 1
 fi
 
@@ -52,8 +62,7 @@ echo "STUDY_NAME=\"$1\"" >> clinical.params
 #build study_Clinical_Data file and sample-part study_Column_Mapping file
 mkdir clinical
 cd clinical
-cp $2 $1_Clinical_Data.txt
-#mv ../../$2 $1_Clinical_Data.txtd
+mv ../../$1_Clinical_Data.txt .
 echo "move $2 into clinical folder and renamed as $1_Clinical_Data.txt"
 
 #copy the column mapping file

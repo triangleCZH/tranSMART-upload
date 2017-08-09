@@ -5,6 +5,42 @@ then
   echo "please enter three arguments: NO.1 to use as the study name NO.2 to specify the sample txt file name NO.3 to specify the vcf parsed txt file name"
   exit 1
 fi
+
+#first delete study and its vcf, if exist
+echo "########################################"
+echo "# Delete the study $1 and vcf if exist #"
+echo "########################################"
+./deleteVCF.sh $1
+./deleteGENE.sh $1
+./deleteClinical.sh $1
+
+
+
+#check if sample and parsed vcf data file exist
+if [ ! -f $2 ]
+then
+  echo "the file $2 does not exist, please make sure is is in transmart-batch/studies"
+  exit 1
+elif [ ! -f $3 ]
+then
+  echo "the file $3 does not exist, please make sure it is in transmart-batch/studies"
+  exit 1
+elif [ ${2: -4} != ".txt" ]
+then
+  echo "the file $2 needs to be .txt, please check the file format"
+elif [ -d $2 ]
+then
+  echo "$2 needs to be a file, not a directory"
+elif [ ${3: -4} != ".txt" ]
+then
+  echo "the file $3 needs to be .txt, please check the file format"
+elif [ -d $2 ]
+then
+  echo "$3 needs to be a file, not a directory"
+fi
+cp $2 /home/transmart/transmart/transmart-data/samples/studies/$1_Clinical_Data.txt
+cp $3 /home/transmart/transmart/transmart-data/samples/studies/$1_VCF_Data.txt
+
 cd /home/transmart/transmart/transmart-data/samples/studies/
 #check folder name existence
 if [ -e $1 ]
@@ -18,28 +54,6 @@ then
     rm $1
   fi
   #exit 1
-fi
-#check if sample and parsed vcf data file exist
-if [ ! -f $2 ]
-then
-  echo "the file $2 does not exist, please make sure is is in transmart-batch/studies"
-  exit 1
-elif [ ! -f $3 ]
-then
-  echo "the file $3 does not exist, please make sure it is in transmart-batch/studies"
-  exit 1
-elif [ ${2: -4} != ".txt" ]
-then 
-  echo "the file $2 needs to be .txt, please check the file format"
-elif [ -d $2 ]
-then
-  echo "$2 needs to be a file, not a directory"
-elif [ ${3: -4} != ".txt" ]
-then 
-  echo "the file $3 needs to be .txt, please check the file format"
-elif [ -d $2 ]
-then
-  echo "$3 needs to be a file, not a directory"
 fi
 
 #build study folder
@@ -61,8 +75,7 @@ echo "STUDY_NAME=\"$1\"" >> clinical.params
 #build study_Clinical_Data file and sample-part study_Column_Mapping file
 mkdir clinical
 cd clinical
-cp $2 $1_Clinical_Data.txt
-#mv ../../$2 $1_Clinical_Data.txt
+mv ../../$1_Clinical_Data.txt .
 echo "move $2 into clinical folder and renamed as $1_Clinical_Data.txt"
 let col_at_least=1
 let col_num="`cat /home/transmart/transmart/transmart-data/samples/studies/$1/clinical/$1_Clinical_Data.txt |  head -1 | sed 's/	/\n/g' | wc -l`"
@@ -71,21 +84,21 @@ then
   echo "$1_Clinical_Data.txt should be a tab-delimited file with at least one column, but less than one column is found"
   exit 1
 fi
-echo "filename	category_cd	col_nbr	data_label	data_label_source	control_vocab_cd	concept_type" > $1_Column_Mapping.txt
-for ((count=$col_at_least; count<=$col_num; count++ ))
-do
-  if [ $count -eq 1 ]
-  then
-    echo "$1_Clinical_Data.txt	\	1	SUBJ_ID" >> $1_Column_Mapping.txt
-  else
-    echo -n "$1_Clinical_Data.txt	Sample	$count	" >> $1_Column_Mapping.txt
-    echo "`cut -d'	' -f$count $1_Clinical_Data.txt | head -1`" >> $1_Column_Mapping.txt
-  fi
-done
+#echo "filename	category_cd	col_nbr	data_label	data_label_source	control_vocab_cd	concept_type" > $1_Column_Mapping.txt
+#for ((count=$col_at_least; count<=$col_num; count++ ))
+#do
+#  if [ $count -eq 1 ]
+#  then
+#    echo "$1_Clinical_Data.txt	\	1	SUBJ_ID" >> $1_Column_Mapping.txt
+#  else
+#    echo -n "$1_Clinical_Data.txt	Sample	$count	" >> $1_Column_Mapping.txt
+#    echo "`cut -d'	' -f$count $1_Clinical_Data.txt | head -1`" >> $1_Column_Mapping.txt
+#  fi
+#done
 echo "sample data build and sample-part mapping file done"
 
 #build study_VCF_Data file and vcf-part study_Column_Mapping file
-cp $3 $1_VCF_Data.txt
+mv ../../$1_VCF_Data.txt .
 #mv ../../$3 $1_Clinical_Data.txt
 echo "move $3 into clinical folder and renamed as $3_VCF_Data.txt"
 let col_at_least=1
@@ -95,16 +108,16 @@ then
   echo "$1_VCF_Data.txt should be a tab-delimited file with at least one column, but less than one column is found"
   exit 1
 fi
-for ((count=$col_at_least; count<=$col_num; count++ ))
-do
-  if [ $count -eq 1 ]
-  then
-    echo "$1_VCF_Data.txt	\	1	SUBJ_ID" >> $1_Column_Mapping.txt
-  else
-    echo -n "$1_VCF_Data.txt	Variant	$count	" >> $1_Column_Mapping.txt
-    echo "`cut -d'	' -f$count $1_VCF_Data.txt | head -1`" >> $1_Column_Mapping.txt
-  fi
-done
+#for ((count=$col_at_least; count<=$col_num; count++ ))
+#do
+#  if [ $count -eq 1 ]
+#  then
+#    echo "$1_VCF_Data.txt	\	1	SUBJ_ID" >> $1_Column_Mapping.txt
+#  else
+#    echo -n "$1_VCF_Data.txt	Variant	$count	" >> $1_Column_Mapping.txt
+#    echo "`cut -d'	' -f$count $1_VCF_Data.txt | head -1`" >> $1_Column_Mapping.txt
+#  fi
+#done
 echo "parsed vcf data build and sample-part mapping file done"
 
 echo "In the mapping file all columns are tab-delimited, where category_cd and data_label can be \"\" by default" 

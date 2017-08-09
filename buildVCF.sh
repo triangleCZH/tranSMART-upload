@@ -61,19 +61,8 @@ then
 fi
 
 #make sure the old one, if exists, is deleted in psql
-cd ~
-let searchExistence="`grep -e "^$1$" study_id.txt | wc -l`"
-echo -n "Check if the vcf already exist, this is the time of existence: "
-echo $searchExistence
-if [ $searchExistence -eq 0 ]
-then
-  echo "This is a new file, record the study name in study_id.txt"
-  #echo $1 >> study_id.txt
-else
-  ./deleteVCFDB.sh $1
-  echo "$1 old vcf file is deleted"
-fi
-echo $1 >> study_id.txt
+
+
 cd /home/transmart/transmart/transmart-data/samples/studies/
 
 #check study folder name existence
@@ -154,7 +143,7 @@ do
 done
 
 cd ~/transmart/transmart-data/samples/studies
-rm -rf $1/vcf
+#rm -rf $1 #/vcf
 echo "clean $1 study folder now"
 cd ../common
 rm -rf $1
