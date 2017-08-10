@@ -23,16 +23,22 @@ SCRIPT_PATH="`dirname $(readlink -f $0)`"
 #check number of arguments
 if [ $# -ne 3 ]
 then
-  usage "Please enter three arguments: NO.1 to use as the study name NO.2 to specify the sample txt file name NO.3 to specify the vcf parsed txt file name. This script will upload the study clinical data, together with vcf-parsed data"
+  if [ $4 == "sudo" ]
+  then 
+    echo "You are a super user"
+    $SCRIPT_PATH/deleteVCF.sh $1
+    $SCRIPT_PATH/deleteGENE.sh $1
+    $SCRIPT_PATH/deleteClinical.sh $1
+  else
+    usage "Please enter three arguments: NO.1 to use as the study name NO.2 to specify the sample txt file name NO.3 to specify the vcf parsed txt file name. This script will upload the study clinical data, together with vcf-parsed data"
+  fi
+else
+  #first delete study and its vcf, if exist
+  echo "##################################################"
+  echo "# Delete the study $1 ,vcf and mutation if exist #"
+  echo "##################################################"
+  $SCRIPT_PATH/checkStudy.sh $1
 fi
-
-#first delete study and its vcf, if exist
-echo "##################################################"
-echo "# Delete the study $1 ,vcf and mutation if exist #"
-echo "##################################################"
-$SCRIPT_PATH/deleteVCF.sh $1
-$SCRIPT_PATH/deleteGENE.sh $1
-$SCRIPT_PATH/deleteClinical.sh $1
 
 
 cd $PWD_DIR
@@ -56,8 +62,8 @@ elif [ -d $2 ]
 then
   usage "$3 needs to be a file, not a directory"
 fi
-cp $PWD_DIR/$2 $TRANSMART_STUDY/$1_Clinical_Data.txt
-cp $PWD_DIR/$3 $TRANSMART_STUDY/$1_VCF_Data.txt
+cp $2 $TRANSMART_STUDY/$1_Clinical_Data.txt
+cp $3 $TRANSMART_STUDY/$1_VCF_Data.txt
 
 cd $TRANSMART_STUDY 
 #check folder name existence
