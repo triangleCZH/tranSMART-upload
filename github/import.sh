@@ -29,5 +29,6 @@ $SCRIPT_PATH/buildVCF.sh $1 $DATA_PATH/$1.vcf
 $SCRIPT_PATH/buildPlatform.sh $1 $DATA_PATH/$1.platform
 $SCRIPT_PATH/buildMicroarray.sh $1 $DATA_PATH/$1.data
 $SCRIPT_PATH/deleteFolders.sh $1
+$SCRIPT_PATH/addTrack.sh $1
 
 trap : 0
