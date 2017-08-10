@@ -1,0 +1,28 @@
+filename	category_cd	col_nbr	data_label	data_label_source	control_vocab_cd	concept_type
+Sample_Clinical_Data.txt	\	1	SUBJ_ID
+Sample_Clinical_Data.txt	\	2	OMIT
+Sample_Clinical_Data.txt	Sample	3	OMIT
+Sample_Clinical_Data.txt	Sample	4	Age
+Sample_Clinical_Data.txt	Sample	5	Disease
+Sample_Clinical_Data.txt	Sample	6	Sexuality
+Sample_Clinical_Data.txt	Sample	7	Tissue
+Sample_VCF_Data.txt	Variant	1	SUBJ_ID
+Sample_VCF_Data.txt	Variant	2	OMIT
+Sample_VCF_Data.txt	Variant	3	OMIT
+Sample_VCF_Data.txt	Variant	4	OMIT
+Sample_VCF_Data.txt	Variant	5	OMIT
+Sample_VCF_Data.txt	Variant	6	OMIT
+Sample_VCF_Data.txt	Variant	7	Gene	
+Sample_VCF_Data.txt	Variant	8	OMIT
+Sample_VCF_Data.txt	Variant+Consequence	9	missense_variant			NUMERICAL
+Sample_VCF_Data.txt	Variant+Consequence	10	downstream_gene_variant			NUMERICAL
+Sample_VCF_Data.txt	Variant+Consequence	11	intron_variant			NUMERICAL
+Sample_VCF_Data.txt	Variant+Consequence	12	stop_gained			NUMERICAL
+Sample_VCF_Data.txt	Variant+Consequence	13	inframe_deletion			NUMERICAL
+Sample_VCF_Data.txt	Variant+Consequence	14	NMD_transcript_variant			NUMERICAL
+Sample_VCF_Data.txt	Variant	15	OMIT
+Sample_VCF_Data.txt	Variant	16	AF
+Sample_VCF_Data.txt	Variant	17	OMIT
+Sample_VCF_Data.txt	Variant	18	AN
+Sample_VCF_Data.txt	Variant	19	OMIT
+Sample_VCF_Data.txt	Variant	20	AC
