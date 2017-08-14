@@ -39,7 +39,7 @@ then
   usage "$2 needs to be a file, not a directory"
 fi
 
-cp $PWD_DIR/$2 $TRANSMART_STUDY/Platform$1.txt
+cp $2 $TRANSMART_STUDY/Platform$1.txt
 
 cd $TRANSMART_STUDY
 

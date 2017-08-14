@@ -13,10 +13,10 @@ cd $SCRIPT_PATH
 sudo -u postgres psql < deleteAll.sql
 if [ $# -eq 0 ]
 then
-  buildStudy.sh All-CGDB-Samples sample.txt sample.parse.txt
+  $SCRIPT_PATH/buildStudy.sh All-CGDB-Samples sample.txt sample.parse.txt sudo
 elif [ $1 != 'yes' ]
 then 
-  buildStudy.sh All-CGDB-Samples sample.txt sample.parse.txt
+  $SCRIPT_PATH/buildStudy.sh All-CGDB-Samples sample.txt sample.parse.txt sudo
 fi
 
 

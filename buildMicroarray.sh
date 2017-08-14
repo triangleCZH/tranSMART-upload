@@ -18,48 +18,48 @@ SCRIPT_PATH="`dirname $(readlink -f $0)`"
 
 
 checkExist () {
-cd $PWD_DIR
-echo "checking the existence and format of $1"
-if [ ! -f $1 ]
-then
-  usage "the file $1 does not exist"
-elif [ ${1: -4} != ".txt" ]
-then
-  echo "you need a file that ends up with .txt"
-else
-  echo "the file $1 has correct format."
-fi
+  cd $PWD_DIR
+  echo "checking the existence and format of $1"
+  if [ ! -f $1 ]
+  then
+    usage "the file $1 does not exist"
+  elif [ ${1: -4} != ".txt" ]
+  then
+    echo "you need a file that ends up with .txt"
+  else
+    echo "the file $1 has correct format."
+  fi
 }
 
 createFolder () {
-cd $PWD_DIR
-cp $2 $TRANSMART_STUDY/data.txt
+  cd $PWD_DIR
+  cp $2 $TRANSMART_STUDY/data.txt
 
-#create expression.params
-cd $TRANSMART_STUDY/$1
-echo "DATA_FILE_PREFIX=\"data\"" > expression.params
-echo "MAP_FILENAME=\"map.txt\"" >> expression.params
-echo "STUDY_ID=$1" >> expression.params
-echo "STUDY_NAME=\"$1\"" >> expression.params
-echo "TOP_NODE_PREFIX=\"Public Studies\\CGDB\"" >> expression.params
+  #create expression.params
+  cd $TRANSMART_STUDY/$1
+  echo "DATA_FILE_PREFIX=\"data\"" > expression.params
+  echo "MAP_FILENAME=\"map.txt\"" >> expression.params
+  echo "STUDY_ID=$1" >> expression.params
+  echo "STUDY_NAME=\"$1\"" >> expression.params
+  echo "TOP_NODE_PREFIX=\"Public Studies\\CGDB\"" >> expression.params
 
-#create expression folder
-mkdir expression >> /dev/null 2>&1
-cd expression
-#data.txt
-mv ../../data.txt .
-#map.txt
-echo "STUDY_ID	SITE_ID	SUBJECT_ID	SAMPLE_CD	PLATFORM	TISSUETYPE	ATTR1	ATTR2	category_cd" > map.txt
-col_num="`wc -l ../clinical/$1_Clinical_Data.txt | cut -d' ' -f1`"
-echo "There are $col_num columns in total"
-x=2
-while [ $x -le $col_num ]
-do
-  echo -n "$1		" >> map.txt
-  echo -n "`cut -d'	' -f1-2 ../clinical/$1_Clinical_Data.txt | awk "NR==$x"`" >> map.txt
-  echo  "	Platform$1				Gene-Variant" >> map.txt
-  x=$(( $x + 1 ))
-done 
+  #create expression folder
+  mkdir expression >> /dev/null 2>&1
+  cd expression
+  #data.txt
+  mv ../../data.txt .
+  #map.txt
+  echo "STUDY_ID	SITE_ID	SUBJECT_ID	SAMPLE_CD	PLATFORM	TISSUETYPE	ATTR1	ATTR2	category_cd" > map.txt
+  col_num="`wc -l ../clinical/$1_Clinical_Data.txt | cut -d' ' -f1`"
+  echo "There are $col_num columns in total"
+  x=2
+  while [ $x -le $col_num ]
+  do
+    echo -n "$1		" >> map.txt
+    echo -n "`cut -d'	' -f1-2 ../clinical/$1_Clinical_Data.txt | awk "NR==$x"`" >> map.txt
+    echo  "	Platform$1				Gene-Variant" >> map.txt
+    x=$(( $x + 1 ))
+  done 
 
 }
 

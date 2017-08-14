@@ -23,5 +23,4 @@ echo "Platform$1 deleted"
 cd $TRANSMART_COMMON
 rm -rf $1
 echo "common/$1 folder deleted"
-
 trap : 0

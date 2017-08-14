@@ -20,53 +20,44 @@ SCRIPT_PATH="`dirname $(readlink -f $0)`"
 
 #The function to check vcf file existence, has one argument, which is the name of target vcf file
 checkExistVCF () {
-cd $PWD_DIR
-echo "checking the existence and format of $1"
-if [ ! -f $1 ]
-then
-  usage "the file $1 does not exist"
-elif [ ${1: -4} != ".vcf" ]
-then
-  usage "you need a file that ends up with .vcf"
-fi
-echo "the file $1 has correct format."
+  cd $PWD_DIR
+  echo "checking the existence and format of $1"
+  if [ ! -f $1 ]
+  then
+    usage "the file $1 does not exist"
+  elif [ ${1: -4} != ".vcf" ]
+  then
+    usage "you need a file that ends up with .vcf"
+  fi
+  echo "the file $1 has correct format."
 }
 
 #The function to create the folder in studies/ and commom/ , has two arguments, 1) the study name, 2) name of the vcf file
 createFolderVCF () {
-cd $PWD_DIR
-cp $2 $TRANSMART_STUDY/$1.vcf
-cd $TRANSMART_STUDY/$1
-echo "copy vcf file to $1 study folder"
-mkdir vcf 
-cd vcf
-echo "created and enter in vcf/ folder"
-mv $TRANSMART_STUDY/$1.vcf .
-#vcfFile="`ls | grep ".vcf"`"
-#vcfName=${vcfFile:0:-4}
-#echo "entering folder $1, start creating folders for $vcfFile" 
-#mkdir $vcfName >> /dev/null 2>&1
-#cd $vcfName
-echo "build tmp folder in vcf/"
-mkdir tmp >> /dev/null 2>&1
-#mv $2 .
-#mv ../../../$2 .
-#mv ../$vcfFile .
-#echo "move $vcfFile into $vcfName vcf folder"
-echo "creating subject-sample-mapping.txt"
-echo "# This file is a sample mapping file for vcf, if you want to use this file ,please delete these two comment lines." #> subject-sample-mapping.txt
-echo "# A mapping file should have at least two columns, the first column is subject from clinical file, the second column is sample from vcf file, delimited by tab" #>> subject-sample-mapping.txt
-echo -n "`cat $TRANSMART_STUDY/$1/clinical/$1_Clinical_Data.txt | head -2 | tail -1 | cut -d'	' -f1`" > subject-sample-mapping.txt
-echo  "	AggregatedSample" >> subject-sample-mapping.txt
-echo "finish creating mapping file"
-echo "Now create the vcf.params"
-echo "copy samples/commom/vcf.params-sample to a folder named $1, you can use the file after modifying some details"
-cd $TRANSMART_COMMON
-mkdir $1 >> /dev/null 2>&1
-echo "Made a directory called $1"
-cp $SCRIPT_PATH/vcf.params-sample $1/vcf.params
-sed -i "s/study_name/$1/g" $1/vcf.params
-echo "Finish process with $2"
+  cd $PWD_DIR
+  cp $2 $TRANSMART_STUDY/$1.vcf
+  cd $TRANSMART_STUDY/$1
+  echo "copy vcf file to $1 study folder"
+  mkdir vcf 
+  cd vcf
+  echo "created and enter in vcf/ folder"
+  mv $TRANSMART_STUDY/$1.vcf .
+  echo "build tmp folder in vcf/"
+  mkdir tmp >> /dev/null 2>&1
+  echo "creating subject-sample-mapping.txt"
+  echo "# This file is a sample mapping file for vcf, if you want to use this file ,please delete these two comment lines." #> subject-sample-mapping.txt
+  echo "# A mapping file should have at least two columns, the first column is subject from clinical file, the second column is sample from vcf file, delimited by tab" #>> subject-sample-mapping.txt
+  echo -n "`cat $TRANSMART_STUDY/$1/clinical/$1_Clinical_Data.txt | head -2 | tail -1 | cut -d'	' -f1`" > subject-sample-mapping.txt
+  echo  "	AggregatedSample" >> subject-sample-mapping.txt
+  echo "finish creating mapping file"
+  echo "Now create the vcf.params"
+  echo "copy samples/commom/vcf.params-sample to a folder named $1, you can use the file after modifying some details"
+  cd $TRANSMART_COMMON
+  mkdir $1 >> /dev/null 2>&1
+  echo "Made a directory called $1"
+  cp $SCRIPT_PATH/vcf.params-sample $1/vcf.params
+  sed -i "s/study_name/$1/g" $1/vcf.params
+  echo "Finish process with $2"
 }
 
 
@@ -124,17 +115,15 @@ echo "Finish the whole process"
 
 #the uploading function, which takes two arguments, the study name and a specific vcf file's name
 upload () {
-cd $TRANSMART_STUDY/$1/vcf
-vcfName="`ls`" #by default, we should only have one vcf file for this study, or else ls may not work
-echo "I know that the vcf file name is $vcfName"
-cd $TRANSMART_COMMON/$1
-echo "use the $vcfName-vcf.params as source"
-. ./vcf.params
+  cd $TRANSMART_STUDY/$1/vcf
+  cd $TRANSMART_COMMON/$1
+  echo "use the $vcfName-vcf.params as source"
+  . ./vcf.params
 
-cd $TRANSMART_DATA
-. ./vars
-make -C samples/postgres load_vcf
-echo "finish uploading $1"
+  cd $TRANSMART_DATA
+  . ./vars
+  make -C samples/postgres load_vcf
+  echo "finish uploading $1"
 }
 
 upload $1 $2

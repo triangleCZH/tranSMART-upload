@@ -8,6 +8,7 @@ set -e
 SCRIPT_PATH="`dirname $(readlink -f $0)`"
 . $SCRIPT_PATH/config.sh
 
+echo "You want to delete mutations for $1"
 cd $SCRIPT_PATH
 STUDYID="`echo $1 | tr [a-z] [A-Z]`"
 cp deleteGENE.sql $1-deleteGENE.sql

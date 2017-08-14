@@ -8,6 +8,7 @@ set -e
 SCRIPT_PATH="`dirname $(readlink -f $0)`"
 . $SCRIPT_PATH/config.sh
 
+echo "You want to delete vcf for $1"
 cd $SCRIPT_PATH
 STUDYID="`echo $1 | tr [a-z] [A-Z]`"
 cp deleteVCF.sql $1-deleteVCF.sql
